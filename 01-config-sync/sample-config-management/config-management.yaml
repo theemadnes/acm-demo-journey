@@ -1,0 +1,28 @@
+# config-management.yaml
+
+apiVersion: configmanagement.gke.io/v1
+kind: ConfigManagement
+metadata:
+  name: config-management
+spec:
+  # clusterName is required and must be unique among all managed clusters
+  clusterName: cluster-01 # replace this with your cluster's name
+  git: # defines config sync parameters
+    syncRepo: git@github.com:theemadnes/acm-demo-journey.git
+    syncBranch: main
+    #secretType: TYPE # public repo
+    policyDir: "01-config-sync/config-base"
+  policyController:
+    enabled: true # enables policy controller
+    # Uncomment to prevent the template library from being installed
+    # templateLibraryInstalled: false
+    # Uncomment to enable support for referential constraints
+    # referentialRulesEnabled: true
+    # Uncomment to disable audit, adjust value to set audit interval
+    # auditIntervalSeconds: 0
+    # Uncomment to log all denies and dryrun failures
+    # logDeniesEnabled: true
+    # Uncomment to exempt namespaces
+    # exemptableNamespaces: ["namespace-name"]
+  configConnector:
+    enabled: true # enables config connector
