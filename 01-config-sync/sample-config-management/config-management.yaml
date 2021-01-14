@@ -10,8 +10,8 @@ spec:
   git: # defines config sync parameters
     syncRepo: git@github.com:theemadnes/acm-demo-journey.git
     syncBranch: main
-    #secretType: TYPE # public repo
-    policyDir: "01-config-sync/config-base"
+    secretType: none # public repo
+    policyDir: "./01-config-sync/config-base"
   policyController:
     enabled: true # enables policy controller
     # Uncomment to prevent the template library from being installed

@@ -10,3 +10,13 @@ This isn't meant to be a deep dive in to all the various bells and whistles that
 As mentioned in the prior section, we're going to assume you have the `config-management-operator` deployed to your GKE cluster as decscribed [here](https://cloud.google.com/anthos-config-management/docs/how-to/installing-config-sync#configuring-config-sync).
 
 For the configuration of ACM beyond that, the following section includes a sample `configManagement` spec YAML that will get you up and running with minimal modification. 
+
+
+##### 01-config-sync
+
+Let's actually deploy the config sync, policy controller, and config connector bits first. There is a sample `config-management.yaml` in `01-config-sync/sample-config-management`. Tweak the cluster name if you wish, and apply it:
+
+```
+$ kubectl apply -f 01-config-sync/sample-config-management/config-management.yaml
+configmanagement.configmanagement.gke.io/config-management created
+```
