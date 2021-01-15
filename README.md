@@ -62,3 +62,29 @@ data:
 kind: ConfigMap
 ```
 
+##### 02-policy-controller-basic
+
+Let's start with a simple example of leveraging Policy Controller to establish some guardrails for Kubernetes resources. In this section, you'll leverage the existing [constraint template library](https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library) to get a simple policy deployed.
+
+
+If you want to get a print-out of what constraint templates you have at your disposal, run the following command:
+
+```
+$ kubectl get constrainttemplates
+NAME                                      AGE
+allowedserviceportname                    16h
+destinationruletlsenabled                 16h
+disallowedauthzprefix                     16h
+k8sallowedrepos                           16h
+k8sblockprocessnamespacesharing           16h
+k8scontainerlimits                        16h
+*                                         *
+*                                         *
+*                                         *
+```
+
+Let's use the [`k8srequiredlabels`](https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library#k8srequiredlabels) to enforce a labeling / tagging taxonomy. The following command will print out the details of the constraint template, including the policy language (written in Rego):
+
+```
+$ kubectl describe constrainttemplates k8srequiredlabels
+```

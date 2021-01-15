@@ -1,0 +1,15 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredLabels
+metadata:
+  name: pod-must-have-buzz-label
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - foo
+  parameters:
+    labels:
+      - key: "buzz"
+  #enforcementAction: dryrun # dryrun == audit mode
