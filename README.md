@@ -47,14 +47,14 @@ audit   Active   28s
 Last thing we're going to verify is that namespace inheritence is working. Namespace inheritence is described [here](https://cloud.google.com/kubernetes-engine/docs/add-on/config-sync/concepts/namespace-inheritance). For our example, `01-config-sync/namespaces/inherited-example` is an "abstract namespace directory" that contains `inherited-configmap.yaml`, a sample `configMap`. Namespace inheritence allows us to define that namespace spec once, and the two namespaces defined (`inherited-demo-01` and `inherited-demo-02`) will both "inherit" the configMap.
 
 ```
-kubectl get cm/inherited-configmap -oyaml -n inherited-demo-01
+$ kubectl get cm/inherited-configmap -oyaml -n inherited-demo-01
 apiVersion: v1
 data:
   database: foo-db
   database_uri: foo-db://1.1.1.1:1234
 kind: ConfigMap
 
-kubectl get cm/inherited-configmap -oyaml -n inherited-demo-02
+$ kubectl get cm/inherited-configmap -oyaml -n inherited-demo-02
 apiVersion: v1
 data:
   database: foo-db
