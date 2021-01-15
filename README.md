@@ -21,27 +21,27 @@ $ kubectl apply -f 01-config-sync/sample-config-management/config-management.yam
 configmanagement.configmanagement.gke.io/config-management created
 ```
 
-A few things will happen after you apply that YAML. The pods for Config Sync, Policy Controller, and Config Connector will get deployed, and with Config Sync deployed, your cluster will now start watching the `policyDir` defined in `01-config-sync/sample-config-management/config-management.yaml`. If Config Sync is working properly, you'll have 3 additional namespaces (`audit`, `inherited-demo-01`, and `inherited-demo-01`):
+A few things will happen after you apply that YAML. The pods for Config Sync, Policy Controller, and Config Connector will get deployed, and with Config Sync deployed, your cluster will now start watching the `policyDir` defined in `01-config-sync/sample-config-management/config-management.yaml`. If Config Sync is working properly, you'll have 3 additional namespaces (`foo`, `inherited-demo-01`, and `inherited-demo-01`):
 
 ```
 $ kubectl get ns
 configmanagement.configmanagement.gke.io/config-management created
 NAME                       STATUS   AGE
-audit                      Active   7m46s
+foo                        Active   7m46s
 ********  OTHER NAMESPACE STUFF  ********
 inherited-demo-01          Active   7m46s
 inherited-demo-02          Active   7m46s
 ```
 
-Verify that Config Sync is constantly reconciling the configuration of your cluster against the desired state in the `policyDir` by deleting the `audit` namespace, and verifying that it gets re-created automatically in near-realtime:
+Verify that Config Sync is constantly reconciling the configuration of your cluster against the desired state in the `policyDir` by deleting the `foo` namespace, and verifying that it gets re-created automatically in near-realtime:
 
 ```
-$ kubectl delete ns audit
-namespace "audit" deleted
+$ kubectl delete ns foo
+namespace "foo" deleted
 
-$ kubectl get ns audit
+$ kubectl get ns foo
 NAME    STATUS   AGE
-audit   Active   28s
+foo     Active   28s
 ```
 
 Last thing we're going to verify is that namespace inheritence is working. Namespace inheritence is described [here](https://cloud.google.com/kubernetes-engine/docs/add-on/config-sync/concepts/namespace-inheritance). For our example, `01-config-sync/namespaces/inherited-example` is an "abstract namespace directory" that contains `inherited-configmap.yaml`, a sample `configMap`. Namespace inheritence allows us to define that namespace spec once, and the two namespaces defined (`inherited-demo-01` and `inherited-demo-02`) will both "inherit" the configMap.
@@ -50,15 +50,15 @@ Last thing we're going to verify is that namespace inheritence is working. Names
 $ kubectl get cm/inherited-configmap -oyaml -n inherited-demo-01
 apiVersion: v1
 data:
-  database: foo-db
-  database_uri: foo-db://1.1.1.1:1234
+  database: bar-db
+  database_uri: bar-db://1.1.1.1:1234
 kind: ConfigMap
 
 $ kubectl get cm/inherited-configmap -oyaml -n inherited-demo-02
 apiVersion: v1
 data:
-  database: foo-db
-  database_uri: foo-db://1.1.1.1:1234
+  database: bar-db
+  database_uri: bar-db://1.1.1.1:1234
 kind: ConfigMap
 ```
 
