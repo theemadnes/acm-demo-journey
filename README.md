@@ -126,7 +126,7 @@ $ kubectl apply -f 02-policy-controller-basic/fizz-pod.yaml
 Error from server ([denied by pod-must-have-buzz-label] you must provide labels: {"buzz"}): error when creating "02-policy-controller-basic/fizz-pod.yaml": admission webhook "validation.gatekeeper.sh" denied the request: [denied by pod-must-have-buzz-label] you must provide labels: {"buzz"}
 ```
 
-You have a few options for remediation. You can modify the pod spec YAML and uncomment the "buzz" label (line 8 of `02-policy-controller-basic/fizz-pod.yaml`) *or* you can switch the constraint to audit mode (by uncommenting line 15 of `02-policy-controller-basic/pod-buzz-label-constraint.yaml`), so a non-compliant pod can be created, but will be logged for non-compliance. If you choose to do the latter, run the following, and you should see the offending pod has been logged: 
+You have a few options for remediation. You can modify the pod spec YAML and uncomment the "buzz" label (line 8 of `02-policy-controller-basic/fizz-pod.yaml`) *or* you can switch the constraint's `enforcementAction` to audit mode (by uncommenting line 15 of `02-policy-controller-basic/pod-buzz-label-constraint.yaml`), so a non-compliant pod can be created, but will be logged for non-compliance. If you choose to do the latter, run the following, and you should see the offending pod has been logged: 
 
 ```
 $ kubectl describe K8sRequiredLabels/pod-must-have-buzz-label
