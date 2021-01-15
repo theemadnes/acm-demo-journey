@@ -135,3 +135,19 @@ $ kubectl describe K8sRequiredLabels/pod-must-have-buzz-label
 ```
 
 ##### 03-config-connector
+
+In this section, you're going to use the Kubernetes Resource Model to deploy both the application elements common to Kubernetes (pods, service, etc) *and* some GCP resources outside of the GKE cluster that the application will interact with. 
+
+Make sure you've enabled the Resource Manager API:
+
+```
+$ gcloud services enable cloudresourcemanager.googleapis.com
+```
+
+Additionally, create a namespace that matches the project ID you're going to be creating GCP resources in (<em>note - we'll be using that project ID environment variable in future commands</em>):
+
+```
+$ export project_id=$(gcloud config get-value project) # or whatever project you want to use 
+$ kubectl create namespace $project_id
+namespace/REDACTED created
+```
