@@ -72,15 +72,17 @@ If you want to get a print-out of what constraint templates you have at your dis
 ```
 $ kubectl get constrainttemplates
 NAME                                      AGE
-allowedserviceportname                    16h
-destinationruletlsenabled                 16h
-disallowedauthzprefix                     16h
-k8sallowedrepos                           16h
-k8sblockprocessnamespacesharing           16h
-k8scontainerlimits                        16h
-*                                         *
-*                                         *
-*                                         *
+allowedserviceportname                    17h
+destinationruletlsenabled                 17h
+disallowedauthzprefix                     17h
+*** trucated for brevity                  ***
+k8spspselinuxv2                           17h
+k8spspvolumetypes                         17h
+k8srequiredlabels                         17h
+k8srestrictnamespaces                     17h
+k8srestrictrolebindings                   17h
+policystrictonly                          17h
+sourcenotallauthz                         17h
 ```
 
 Let's use the [`k8srequiredlabels`](https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library#k8srequiredlabels) constraint to enforce a labeling / tagging taxonomy. The following command will print out the details of the constraint template, including the policy language (written in Rego):
