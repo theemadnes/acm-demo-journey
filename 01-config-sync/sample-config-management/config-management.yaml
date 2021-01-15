@@ -8,7 +8,7 @@ spec:
   # clusterName is required and must be unique among all managed clusters
   clusterName: cluster-01 # replace this with your cluster's name
   git: # defines config sync parameters
-    syncRepo: git@github.com:theemadnes/acm-demo-journey.git
+    syncRepo: https://github.com/theemadnes/acm-demo-journey.git
     syncBranch: main
     secretType: none # public repo
     policyDir: "./01-config-sync/config-base"
