@@ -83,8 +83,53 @@ k8scontainerlimits                        16h
 *                                         *
 ```
 
-Let's use the [`k8srequiredlabels`](https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library#k8srequiredlabels) to enforce a labeling / tagging taxonomy. The following command will print out the details of the constraint template, including the policy language (written in Rego):
+Let's use the [`k8srequiredlabels`](https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library#k8srequiredlabels) constraint to enforce a labeling / tagging taxonomy. The following command will print out the details of the constraint template, including the policy language (written in Rego):
 
 ```
 $ kubectl describe constrainttemplates k8srequiredlabels
 ```
+
+Now we can create a constraint the leverages the `k8srequiredlabels` template. Take a look at the constraint spec:
+
+```
+$ cat 02-policy-controller-basic/pod-buzz-label-constraint.yaml 
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRequiredLabels
+metadata:
+  name: pod-must-have-buzz-label
+spec:
+  match:
+    kinds:
+      - apiGroups: [""]
+        kinds: ["Pod"]
+    namespaces:
+      - foo
+  parameters:
+    labels:
+      - key: "buzz"
+  #enforcementAction: dryrun # dryrun == audit mode
+```
+
+Notice the `kind` field references the constraint template. Also, within the spec, the constraint is scoped specifically to pods in the `foo` namespace, and is requiring that the pod has a label with a key of "buzz" applied to it. Lastly, notice that the `enforcementAction` field is commented out; this means that the policy will be enforced by the admission controller and creation of a pod *without* the "buzz" label in the `foo` namespace will be blocked. Uncommenting this field will switch to audit mode instead.
+
+Apply the constraint:
+
+```
+$ kubectl apply -f 02-policy-controller-basic/pod-buzz-label-constraint.yaml 
+k8srequiredlabels.constraints.gatekeeper.sh/pod-must-have-buzz-label created
+```
+
+Now try to deploy a pod that has the `buzz` label commented out in its spec (see line 8):
+
+```
+$ kubectl apply -f 02-policy-controller-basic/fizz-pod.yaml 
+Error from server ([denied by pod-must-have-buzz-label] you must provide labels: {"buzz"}): error when creating "02-policy-controller-basic/fizz-pod.yaml": admission webhook "validation.gatekeeper.sh" denied the request: [denied by pod-must-have-buzz-label] you must provide labels: {"buzz"}
+```
+
+You have a few options for remediation. You can modify the pod spec YAML and uncomment the "buzz" label (line 8 of `02-policy-controller-basic/fizz-pod.yaml`) *or* you can switch the constraint to audit mode (by uncommenting line 15 of `02-policy-controller-basic/pod-buzz-label-constraint.yaml`), so a non-compliant pod can be created, but will be logged for non-compliance. If you choose to do the latter, run the following, and you should see the offending pod has been logged: 
+
+```
+$ kubectl describe K8sRequiredLabels/pod-must-have-buzz-label
+```
+
+##### 03-config-connector

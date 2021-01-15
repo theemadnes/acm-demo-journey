@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fizz
+  namespace: foo
+  labels:
+    role: acm-policy-demo
+    #buzz: goes-the-bee
+spec:
+  containers:
+    - name: fizz
+      image: nginx
+      ports:
+        - name: web
+          containerPort: 80
+          protocol: TCP
