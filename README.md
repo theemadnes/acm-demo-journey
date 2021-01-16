@@ -138,16 +138,20 @@ $ kubectl describe K8sRequiredLabels/pod-must-have-buzz-label
 
 In this section, you're going to use the Kubernetes Resource Model to deploy both the application elements common to Kubernetes (pods, service, etc) *and* some GCP resources outside of the GKE cluster that the application will interact with. This walkthrough has been tested using the Config Connector [GKE Add-on installation](https://cloud.google.com/config-connector/docs/how-to/install-upgrade-uninstall) method, although there are [alternative approaches](https://cloud.google.com/config-connector/docs/how-to/advanced-install).
 
-Make sure you've enabled the Resource Manager API:
+Make sure you've completed the Config Connector setup (service account setup, policy binding, and applying the ConfigConector YAML), and that you've enabled the Resource Manager API:
 
 ```
 $ gcloud services enable cloudresourcemanager.googleapis.com
 ```
 
-Additionally, create a namespace that matches the project ID you're going to be creating GCP resources in (<em>note - we'll be using that project ID environment variable in future commands</em>):
+For this walkthrough, the K8s resources for both the app elements and the GCP infrastructure will live in the same namespace. Let's create that namespace right now and annotate the namespace resource with the project ID of the project that Config Connector should create the GCP resources in:
 
 ```
 $ export project_id=$(gcloud config get-value project) # or whatever project you want to use 
-$ kubectl create namespace $project_id
-namespace/REDACTED created
+$ kubectl create namespace config-connector-demo-app
+namespace/config-connector-demo-app created
+
+$ kubectl annotate namespace \
+    config-connector-demo-app cnrm.cloud.google.com/project-id=$project_id
+namespace/config-connector-demo-app annotated
 ```
