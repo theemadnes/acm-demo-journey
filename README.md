@@ -14,14 +14,14 @@ For the configuration of ACM beyond that, the following section includes a sampl
 
 ##### 01-config-sync
 
-Let's actually deploy the config sync, policy controller, and config connector bits first. There is a sample `config-management.yaml` in `01-config-sync/sample-config-management`. Tweak the cluster name if you wish, and apply it:
+Let's actually deploy the config sync and policy controller bits first. There is a sample `config-management.yaml` in `01-config-sync/sample-config-management`. Tweak the cluster name if you wish, and apply it:
 
 ```
 $ kubectl apply -f 01-config-sync/sample-config-management/config-management.yaml
 configmanagement.configmanagement.gke.io/config-management created
 ```
 
-A few things will happen after you apply that YAML. The pods for Config Sync, Policy Controller, and Config Connector will get deployed, and with Config Sync deployed, your cluster will now start watching the `policyDir` defined in `01-config-sync/sample-config-management/config-management.yaml`. If Config Sync is working properly, you'll have 3 additional namespaces (`foo`, `inherited-demo-01`, and `inherited-demo-01`):
+A few things will happen after you apply that YAML. The pods for Config Sync and Policy Controller will get deployed, and with Config Sync deployed, your cluster will now start watching the `policyDir` defined in `01-config-sync/sample-config-management/config-management.yaml`. If Config Sync is working properly, you'll have 3 additional namespaces (`foo`, `inherited-demo-01`, and `inherited-demo-01`):
 
 ```
 $ kubectl get ns
@@ -136,7 +136,7 @@ $ kubectl describe K8sRequiredLabels/pod-must-have-buzz-label
 
 ##### 03-config-connector
 
-In this section, you're going to use the Kubernetes Resource Model to deploy both the application elements common to Kubernetes (pods, service, etc) *and* some GCP resources outside of the GKE cluster that the application will interact with. 
+In this section, you're going to use the Kubernetes Resource Model to deploy both the application elements common to Kubernetes (pods, service, etc) *and* some GCP resources outside of the GKE cluster that the application will interact with. This walkthrough has been tested using the Config Connector [GKE Add-on installation](https://cloud.google.com/config-connector/docs/how-to/install-upgrade-uninstall) method, although there are [alternative approaches](https://cloud.google.com/config-connector/docs/how-to/advanced-install).
 
 Make sure you've enabled the Resource Manager API:
 

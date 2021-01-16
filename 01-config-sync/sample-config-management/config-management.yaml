@@ -25,4 +25,4 @@ spec:
     # Uncomment to exempt namespaces
     # exemptableNamespaces: ["namespace-name"]
   configConnector:
-    enabled: true # enables config connector
+    enabled: false # this installation method is deprecated - use the CC operator or GKE add-on instead
