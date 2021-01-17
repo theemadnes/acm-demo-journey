@@ -1,0 +1,15 @@
+apiVersion: iam.cnrm.cloud.google.com/v1beta1
+kind: IAMPolicy
+metadata:
+  name: demo-app-iam-wi-policy
+  namespace: config-connector-demo-app
+spec:
+  resourceRef:
+    apiVersion: iam.cnrm.cloud.google.com/v1beta1
+    kind: IAMServiceAccount
+    name: demo-app-gsa
+  bindings:
+    - role: roles/iam.workloadIdentityUser
+      members:
+        # replace ${project_id} with your project name
+        - serviceAccount:${project_id}.svc.id.goog[config-connector-demo-app/demo-app-ksa]
