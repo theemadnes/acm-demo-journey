@@ -16,7 +16,7 @@ spec:
       serviceAccountName: demo-app-ksa
       containers:
       - name: config-connector-demo-app
-        image: gcr.io/google-samples/whereami:v1.1.3
+        image: gcr.io/am01-services/config-connector-demo-app:latest # 'latest' tag is almost always a bad idea but this is just a demo
         ports:
           - name: http
             containerPort: 3000

@@ -11,7 +11,7 @@ As mentioned in the prior section, we're going to assume you have the `config-ma
 
 For the configuration of ACM beyond that, the following section includes a sample `configManagement` spec YAML that will get you up and running with minimal modification. 
 
-You'll also need `envsubst` installed in your path for some YAML generation that will happen in part 3.
+You'll also need both `envsubst` and [Google Cloud Buildpacks](https://github.com/GoogleCloudPlatform/buildpacks) installed, as they will be used in part 3 to generate some YAML and a container image, respectively.
 
 ## 01-config-sync
 
@@ -170,7 +170,23 @@ To get a print-out of supported GCP resources on whatever version of Config Conn
 $ kubectl get crds --selector cnrm.cloud.google.com/managed-by-kcc=true
 ```
 
+The YAML for the demo app and supporting infrastructure are almost ready to go, but first you need to build a container image in your own [GCR](https://cloud.google.com/container-registry) repo and reference it in the pod spec (`03-config-connector/k8s/app/deployment.yaml`). The following commands assume you've already installed [Google Cloud Buildpacks](https://github.com/GoogleCloudPlatform/buildpacks):
 
+```
+$ export project_id=$(gcloud config get-value project) # or whatever project you want to use
+
+$ pack build -p 03-config-connector/src/ \
+--builder gcr.io/buildpacks/builder:v1 \
+--publish gcr.io/${project_id}/config-connector-demo-app
+.
+.
+.
+Reusing cache layer 'google.nodejs.runtime:node'
+Reusing cache layer 'google.nodejs.npm:npm'
+Successfully built image gcr.io/am01-services/config-connector-demo-app
+```
+
+Once you've built and published your image, update the image reference in `03-config-connector/k8s/app/deployment.yaml` to point to the newly built image. If you're feeling brave, you can use the `:latest` tag as you should only need to build this one. If, on the other hand, you plan on modifying the source and building your own version, I'd suggest publishing with some tagging strategy that's easier to track versions with.
 
 ## TODO
 
