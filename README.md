@@ -5,7 +5,7 @@ This walkthrough assumes you have Anthos Config Management already installed (th
 
 This isn't meant to be a deep dive in to all the various bells and whistles that ACM provides - we're not going to touch things like [Binary Authorization](https://cloud.google.com/binary-authorization/docs/overview) nor the [Heirarchy Controller](https://cloud.google.com/kubernetes-engine/docs/add-on/config-sync/concepts/hierarchy-controller) - but this should be enough to start building some muscle memory on how to simplify multi-cluster management *and* defining guardrails for configuration within those clusters. 
 
-#### Prerequisites
+## Prerequisites
 
 As mentioned in the prior section, we're going to assume you have the `config-management-operator` deployed to your GKE cluster as decscribed [here](https://cloud.google.com/anthos-config-management/docs/how-to/installing-config-sync#configuring-config-sync).
 
@@ -13,7 +13,7 @@ For the configuration of ACM beyond that, the following section includes a sampl
 
 You'll also need `envsubst` installed in your path for some YAML generation that will happen in part 3.
 
-#### 01-config-sync
+## 01-config-sync
 
 Let's actually deploy the config sync and policy controller bits first. There is a sample `config-management.yaml` in `01-config-sync/sample-config-management`. Tweak the cluster name if you wish, and apply it:
 
@@ -63,7 +63,7 @@ data:
 kind: ConfigMap
 ```
 
-#### 02-policy-controller-basic
+## 02-policy-controller-basic
 
 Let's start with a simple example of leveraging Policy Controller to establish some guardrails for Kubernetes resources. In this section, you'll leverage the existing [constraint template library](https://cloud.google.com/anthos-config-management/docs/reference/constraint-template-library) to get a simple policy deployed.
 
@@ -135,7 +135,7 @@ You have a few options for remediation. You can modify the pod spec YAML and unc
 $ kubectl describe K8sRequiredLabels/pod-must-have-buzz-label
 ```
 
-#### 03-config-connector
+## 03-config-connector
 
 In this section, you're going to use the Kubernetes Resource Model to deploy both the application elements common to Kubernetes (pods, service, etc) *and* some GCP resources outside of the GKE cluster that the application will interact with. This walkthrough has been tested using the Config Connector [GKE Add-on installation](https://cloud.google.com/config-connector/docs/how-to/install-upgrade-uninstall) method, although there are [alternative approaches](https://cloud.google.com/config-connector/docs/how-to/advanced-install).
 
