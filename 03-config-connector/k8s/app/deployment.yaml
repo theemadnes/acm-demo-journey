@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: config-connector-demo-app
+  namespace: config-connector-demo-app
 spec:
   replicas: 1
   selector:

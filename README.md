@@ -186,7 +186,65 @@ Reusing cache layer 'google.nodejs.npm:npm'
 Successfully built image gcr.io/am01-services/config-connector-demo-app
 ```
 
-Once you've built and published your image, update the image reference in `03-config-connector/k8s/app/deployment.yaml` to point to the newly built image. If you're feeling brave, you can use the `:latest` tag as you should only need to build this one. If, on the other hand, you plan on modifying the source and building your own version, I'd suggest publishing with some tagging strategy that's easier to track versions with.
+Once you've built and published your image, update the image reference in `03-config-connector/k8s/app/deployment.yaml` to point to the newly built & published image in GCR. If you're feeling brave, you can use the `:latest` tag as you should only need to build this once. If, on the other hand, you plan on modifying the source and building your own versions, I'd suggest publishing with some tagging strategy that's easier to track versions with.
+
+Now, let's deploy the *app* components first (minus the GCP stuff, for now):
+
+```
+$ kubectl apply -f 03-config-connector/k8s/app/namespace.yaml
+namespace/config-connector-demo-app created
+
+$ kubectl apply -f 03-config-connector/k8s/app/
+configmap/config-connector-demo-app-configmap created
+deployment.apps/config-connector-demo-app created
+namespace/config-connector-demo-app unchanged
+serviceaccount/demo-app-ksa created
+service/config-connector-demo-app-svc created
+```
+
+After a few moments, lets capture the IP address of the K8s service that the demo app is exposed on. You'll need a minute or two for the `LoadBalancer` resource to complete provisioning:
+
+```
+$ echo $(kubectl get svc config-connector-demo-app-svc -n config-connector-demo-app | grep -v EXTERNAL-IP | awk '{ print $4}')
+1.2.3.4 # sample
+```
+
+Load up that IP address in a browser (via HTTP, not HTTPS). Give it a few seconds, and you should see something like: `❌ GCP PubSub inaccessible ❌` in your browser window. Take a look at the browser console, and you'll see something like:
+
+```
+Calling /gcp_check path
+(index):29 GET http://1.2.3.4/gcp_check 500 (Internal Server Error)
+checkBackend @ (index):29
+(anonymous) @ (index):48
+(index):41 Received error while publishing: 404 undefined: Getting metadata from plugin failed with error: Could not refresh access token: A Not Found error was returned while attempting to retrieve an accesstoken for the Compute Engine built-in service account. This may be because the Compute Engine instance does not have any permission scopes specified: Could not refresh access token: Unsuccessful response status code. Request failed with status code 404
+```
+
+We expected that, because the GCP stuff hasn't been spun up yet. Let's do that now:
+
+```
+$ kubectl apply -f 03-config-connector/k8s/gcp/
+iampolicy.iam.cnrm.cloud.google.com/demo-app-iam-pubsub-policy created
+iamserviceaccount.iam.cnrm.cloud.google.com/demo-app-gsa created
+iampolicy.iam.cnrm.cloud.google.com/demo-app-iam-wi-policy created
+pubsubtopic.pubsub.cnrm.cloud.google.com/demo-app-topic created
+```
+
+Give it a few minutes, but momentarily you shoudl start seeing `✅ GCP PubSub accessible ✅` in your browser window. Additionally, you should seem something like this in your browser console:
+
+```
+Calling /gcp_check path
+(index):37 Message 1924293278679133 published.
+(index):25 Calling /gcp_check path
+(index):37 Message 1924291607076576 published.
+(index):25 Calling /gcp_check path
+(index):37 Message 1924298495207169 published.
+```
+
+So your app deployment is eventually consistent - you can deploy this stuff in any order, and it eventually converges into a functional (albeit super basic) app. Pretty neat, huh?
+
+## 04-policy-controller-config-connector
+
+hi
 
 ## TODO
 
