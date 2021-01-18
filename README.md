@@ -254,7 +254,17 @@ $ kubectl apply -f 04-policy-controller-config-connector/k8s/pubsub-subscription
 pubsubsubscription.pubsub.cnrm.cloud.google.com/demo-app-subscription created
 ```
 
-`04-policy-controller-config-connector/k8s/pubsub-sub-message-retention-constraint-template.yaml` defines a constraint template that checks to see if a [Pub/Sub subscription resource](https://cloud.google.com/config-connector/docs/reference/resource-docs/pubsub/pubsubsubscription#spec)'s spec defines a `messageRetentionDuration` that matches some value defined in a constraint.
+`04-policy-controller-config-connector/k8s/pubsub-sub-message-retention-constraint-template.yaml` defines a constraint template that checks to see if a [Pub/Sub subscription resource](https://cloud.google.com/config-connector/docs/reference/resource-docs/pubsub/pubsubsubscription#spec)'s spec defines a `messageRetentionDuration` that matches some value defined in a constraint. The [Rego](https://www.openpolicyagent.org/docs/latest/policy-language/) is pretty basic:
+```
+package gcppubsubmessageretention
+
+violation[{"msg": msg}] {
+    input.review.kind.kind == "PubSubSubscription"
+    re_match("^(extensions|pubsub.cnrm.cloud.google.com)$", input.review.kind.group)
+    input.review.object.spec.messageRetentionDuration != input.parameters.permittedMessageRetention
+    msg := sprintf("The messageRetentionDuration must equal %v; it currently equals %v", [input.parameters.permittedMessageRetention, input.review.object.spec.messageRetentionDuration])
+}
+```
 
 Apply the constraint template:
 ```
