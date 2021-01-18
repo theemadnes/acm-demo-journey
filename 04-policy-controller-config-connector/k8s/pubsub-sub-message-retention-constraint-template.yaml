@@ -1,0 +1,25 @@
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: gcppubsubmessageretention
+spec:
+  crd:
+    spec:
+      names:
+        kind: GcpPubsubMessageRetention
+      validation:
+        # Schema for the `parameters` field
+        openAPIV3Schema:
+          properties:
+            invalidMessageRetention:
+              type: string
+  targets:
+    - target: admission.k8s.gatekeeper.sh
+      rego: |
+        package gcppubsubmessageretention
+        violation[{"msg": msg}] {
+          input.review.kind.kind == "PubSubSubscription"
+          re_match("^(extensions|pubsub.cnrm.cloud.google.com)$", input.review.kind.group)
+          input.review.object.spec.messageRetentionDuration != input.parameters.invalidMessageRetention
+          msg := sprintf("The messageRetentionDuration must equal %v", [input.parameters.invalidMessageRetention])
+        }

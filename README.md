@@ -254,6 +254,15 @@ $ kubectl apply -f 04-policy-controller-config-connector/k8s/pubsub-subscription
 pubsubsubscription.pubsub.cnrm.cloud.google.com/demo-app-subscription created
 ```
 
+`04-policy-controller-config-connector/k8s/pubsub-sub-message-retention-constraint-template.yaml` defines a constraint template that checks to see if a [Pub/Sub subscription resource](https://cloud.google.com/config-connector/docs/reference/resource-docs/pubsub/pubsubsubscription#spec)'s spec defines a `messageRetentionDuration` that matches some value defined in a constraint.
+
+Now apply the constraint template:
+```
+$ kubectl apply -f 04-policy-controller-config-connector/k8s/pubsub-sub-message-retention-constraint-template.yaml 
+constrainttemplate.templates.gatekeeper.sh/gcppubsubmessageretention created
+```
+
+
 ## TODO
 
 - add screen shots
