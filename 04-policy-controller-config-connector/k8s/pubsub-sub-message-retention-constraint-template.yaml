@@ -11,7 +11,7 @@ spec:
         # Schema for the `parameters` field
         openAPIV3Schema:
           properties:
-            invalidMessageRetention:
+            permittedMessageRetention:
               type: string
   targets:
     - target: admission.k8s.gatekeeper.sh
@@ -20,6 +20,6 @@ spec:
         violation[{"msg": msg}] {
           input.review.kind.kind == "PubSubSubscription"
           re_match("^(extensions|pubsub.cnrm.cloud.google.com)$", input.review.kind.group)
-          input.review.object.spec.messageRetentionDuration != input.parameters.invalidMessageRetention
-          msg := sprintf("The messageRetentionDuration must equal %v", [input.parameters.invalidMessageRetention])
+          input.review.object.spec.messageRetentionDuration != input.parameters.permittedMessageRetention
+          msg := sprintf("The messageRetentionDuration must equal %v; it currently equals %v", [input.parameters.permittedMessageRetention, input.review.object.spec.messageRetentionDuration])
         }

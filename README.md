@@ -256,12 +256,34 @@ pubsubsubscription.pubsub.cnrm.cloud.google.com/demo-app-subscription created
 
 `04-policy-controller-config-connector/k8s/pubsub-sub-message-retention-constraint-template.yaml` defines a constraint template that checks to see if a [Pub/Sub subscription resource](https://cloud.google.com/config-connector/docs/reference/resource-docs/pubsub/pubsubsubscription#spec)'s spec defines a `messageRetentionDuration` that matches some value defined in a constraint.
 
-Now apply the constraint template:
+Apply the constraint template:
 ```
 $ kubectl apply -f 04-policy-controller-config-connector/k8s/pubsub-sub-message-retention-constraint-template.yaml 
 constrainttemplate.templates.gatekeeper.sh/gcppubsubmessageretention created
 ```
 
+Now that the constraint template has been applied, create a constraint, which specifies the permitted `messageRetentionDuration` (in this example, 1 hour or 3600 seconds) and runs in `dryrun` mode:
+```
+$ kubectl apply -f 04-policy-controller-config-connector/k8s/pubsub-sub-message-retention-constraint.yaml 
+gcppubsubmessageretention.constraints.gatekeeper.sh/pubsub-msg-retention-1-hour created
+```
+
+After a few moments, check the constraint to see if it has flagged our subscription (which it should, as the message retention duration of the subscription is not 1 hour):
+```
+$ kubectl describe gcppubsubmessageretention.constraints.gatekeeper.sh/pubsub-msg-retention-1-hour
+.
+.
+.
+Total Violations:  1
+Violations:
+Enforcement Action:  dryrun
+Kind:                PubSubSubscription
+Message:             The messageRetentionDuration must equal 3600s; it current equals 86400s
+Name:                demo-app-subscription
+Namespace:           config-connector-demo-app
+```
+
+That's it! You've completed this walkthrough, and hopefully learned a few things about ACM & Config Connector along the way. If you have feedback or questions, feel free to contact me via an issue. You have [The Power](https://www.youtube.com/watch?v=j1BNcSBApOU), and if you've been sitting down for too long, you should [Move Your Body](https://www.youtube.com/watch?v=lSjj0vzTU_Y) and get some exercise :) 
 
 ## TODO
 

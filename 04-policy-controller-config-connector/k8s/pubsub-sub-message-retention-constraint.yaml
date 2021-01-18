@@ -1,0 +1,14 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: GcpPubsubMessageRetention
+metadata:
+  name: pubsub-msg-retention-1-hour
+spec:
+  match:
+    kinds:
+      - apiGroups: ["pubsub.cnrm.cloud.google.com","extensions"]
+        kinds: ["PubSubSubscription"]
+    namespaces:
+      - config-connector-demo-app
+  parameters:
+    permittedMessageRetention: "3600s"
+  enforcementAction: dryrun # dryrun == audit mode
