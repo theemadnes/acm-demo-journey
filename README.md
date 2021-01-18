@@ -232,7 +232,7 @@ pubsubtopic.pubsub.cnrm.cloud.google.com/demo-app-topic created
 Give it a few minutes, but momentarily you should start seeing `✅ GCP PubSub accessible ✅` in your browser window. Additionally, you should see something like this in your browser console:
 
 ```
-Calling /gcp_check path
+(index):25 Calling /gcp_check path
 (index):37 Message 1924293278679133 published.
 (index):25 Calling /gcp_check path
 (index):37 Message 1924291607076576 published.
