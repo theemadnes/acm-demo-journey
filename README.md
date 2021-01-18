@@ -145,25 +145,7 @@ Make sure you've completed the Config Connector setup (service account setup, po
 $ gcloud services enable cloudresourcemanager.googleapis.com
 ```
 
-For this walkthrough, the K8s resources for both the app elements and the GCP infrastructure will live in the same namespace. Let's create that namespace right now and annotate the namespace resource with the project ID of the project that Config Connector should create the GCP resources in:
-
-```
-$ export project_id=$(gcloud config get-value project) # or whatever project you want to use 
-$ kubectl create namespace config-connector-demo-app
-namespace/config-connector-demo-app created
-
-$ kubectl annotate namespace \
-    config-connector-demo-app cnrm.cloud.google.com/project-id=$project_id
-namespace/config-connector-demo-app annotated
-```
-
-To get a print-out of supported GCP resources on whatever version of Config Connector you're using, run:
-
-```
-$ kubectl get crds --selector cnrm.cloud.google.com/managed-by-kcc=true
-```
-
-Some of the K8s YAML specs we will use reference the project ID of the project you're going to use, so there are some YAML "templates" in `03-config-connector/k8s-templates` that we'll use the `envsubst` command (by way of `make`) to generate valid K8s YAML from:
+For this walkthrough, the K8s resources for both the app elements and the GCP infrastructure will live in the same K8s namespace called `config-connector-demo-app`. The YAML used to create that namespace, along with several other YAML manifests require references to your project ID. To simplify things, we've included some YAML "templates" in `03-config-connector/k8s-templates` that we'll use the `envsubst` command (by way of `make`) to generate valid K8s YAML from:
 
 ```
 $ export project_id=$(gcloud config get-value project) # or whatever project you want to use
@@ -173,5 +155,13 @@ envsubst < 03-config-connector/k8s-templates/service-account.yaml.template > 03-
 envsubst < 03-config-connector/k8s-templates/iam-wi-policy.yaml.template > 03-config-connector/k8s/gcp/iam-wi-policy.yaml
 envsubst < 03-config-connector/k8s-templates/iam-pubsub-policy.yaml.template > 03-config-connector/k8s/gcp/iam-pubsub-policy.yaml
 envsubst < 03-config-connector/k8s-templates/configmap.yaml.template > 03-config-connector/k8s/app/configmap.yaml
+envsubst < 03-config-connector/k8s-templates/namespace.yaml.template > 03-config-connector/k8s/app/namespace.yaml
 ```
+
+To get a print-out of supported GCP resources on whatever version of Config Connector you're using, run:
+
+```
+$ kubectl get crds --selector cnrm.cloud.google.com/managed-by-kcc=true
+```
+
 

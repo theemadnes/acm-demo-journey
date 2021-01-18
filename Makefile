@@ -4,3 +4,4 @@ create_yaml:
 	envsubst < 03-config-connector/k8s-templates/iam-wi-policy.yaml.template > 03-config-connector/k8s/gcp/iam-wi-policy.yaml
 	envsubst < 03-config-connector/k8s-templates/iam-pubsub-policy.yaml.template > 03-config-connector/k8s/gcp/iam-pubsub-policy.yaml
 	envsubst < 03-config-connector/k8s-templates/configmap.yaml.template > 03-config-connector/k8s/app/configmap.yaml
+	envsubst < 03-config-connector/k8s-templates/namespace.yaml.template > 03-config-connector/k8s/app/namespace.yaml
