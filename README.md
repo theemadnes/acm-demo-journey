@@ -229,7 +229,7 @@ iampolicy.iam.cnrm.cloud.google.com/demo-app-iam-wi-policy created
 pubsubtopic.pubsub.cnrm.cloud.google.com/demo-app-topic created
 ```
 
-Give it a few minutes, but momentarily you shoudl start seeing `✅ GCP PubSub accessible ✅` in your browser window. Additionally, you should seem something like this in your browser console:
+Give it a few minutes, but momentarily you should start seeing `✅ GCP PubSub accessible ✅` in your browser window. Additionally, you should see something like this in your browser console:
 
 ```
 Calling /gcp_check path
