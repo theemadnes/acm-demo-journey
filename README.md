@@ -246,7 +246,13 @@ One more thing - the demo app is basically firing off Pub/Sub messages to nobody
 
 ## 04-policy-controller-config-connector
 
-Let's wrap up with a combined exercise where you'll write a Policy Controller constraint that can be applied to a Config Connector-managed GCP resource (specifically, the Pub/Sub topic from the prior section). 
+Let's wrap up with a combined exercise where you'll write a Policy Controller constraint that can be applied to a Config Connector-managed GCP resource (specifically, a Pub/Sub subscription resource that references the Pub/Sub topic from the prior section). 
+
+Start by provisioning the subscription resource:
+```
+$ kubectl apply -f 04-policy-controller-config-connector/k8s/pubsub-subscription.yaml 
+pubsubsubscription.pubsub.cnrm.cloud.google.com/demo-app-subscription created
+```
 
 ## TODO
 
