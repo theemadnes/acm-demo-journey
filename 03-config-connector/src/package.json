@@ -4,7 +4,8 @@
   "description": "Simple Express.JS app that integrates with GCP resources provisioned via Config Connector / KRM",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
   },
   "homepage": "https://github.com/theemadnes/acm-demo-journey#readme",
   "dependencies": {
-    "@google-cloud/storage": "^5.7.2",
+    "@google-cloud/pubsub": "^2.8.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1"
   }

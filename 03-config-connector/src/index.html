@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Config Connector Demo App</title>
+
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <style>
+        body { padding-top:50px; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="jumbotron" id="myJumbotron">
+            <h1>🔎 testing GCP PubSub access 🔍</h1>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+
+        // calls the gcp_check path to see if things are working
+        function checkBackend () {
+
+            console.log('Calling /gcp_check path');
+            const xhr = new XMLHttpRequest();
+            const url='/gcp_check'; // relative path
+            xhr.open("GET", url);
+            xhr.send();
+
+            xhr.onreadystatechange = (e) => {
+                //console.log(Http.responseText)
+                if(xhr.readyState === XMLHttpRequest.DONE) {
+                    var status = xhr.status;
+                    if (status === 0 || (status >= 200 && status < 400)) {
+                    // The request has been completed successfully
+                    console.log(xhr.responseText);
+                    document.getElementById("myJumbotron").innerHTML = '<h1>✅ GCP PubSub accessible ✅</h1>'; // update jumbotron text
+                    } else {
+                    // Oh no! There has been an error with the request!
+                    console.log(xhr.responseText);
+                    document.getElementById("myJumbotron").innerHTML = '<h1>❌ GCP PubSub inaccessible ❌</h1>'; // update jumbotron text
+                    }
+                }
+            }
+        }
+        
+        const interval = setInterval(function () { checkBackend(); }, 5000); // run every 5 seconds
+    </script>
+
+</body>
+</html>
