@@ -148,7 +148,8 @@ $ gcloud services enable cloudresourcemanager.googleapis.com
 The demo app that you're going to deploy is very simple. It's composed of:
 
 - [Cloud Pub/Sub](https://cloud.google.com/pubsub) topic 
-- Express.js app that runs in K8s pods that serves up two paths. The root (`/`) path serves up an index.html doc, and a second path `/gcp_check/`, when accessed, will attempt to publish a message to the Pub/Sub topic. Embedded in the index.html document is a script running on an interval to `GET` the `/gcp_check/` path, and will report back on whether it was successful or not
+- Express.js [app](03-config-connector/src/index.js) that runs in K8s pods that serves up two paths. The root (`/`) path serves up an [index.html](03-config-connector/src/index.html) doc you'll access in a browser, and a second path `/gcp_check/` that, when accessed, will attempt to publish a message to the Pub/Sub topic. Embedded in the index.html document is a script running on an interval to `GET` the `/gcp_check/` path, and will report back on whether a message was published successfully or not
+- Different identity resources (Google sevice account, IAM policies, etc) and Kubernetes (Kubernetes service account, workload identity) resources to grant proper permissions to the demo app 
 
 For this walkthrough, the K8s resources for both the app elements and the GCP infrastructure will live in the same K8s namespace called `config-connector-demo-app`. The YAML used to create that namespace, along with several other YAML manifests require references to your project ID. To simplify things, we've included some YAML "templates" in `03-config-connector/k8s-templates` that we'll use the `envsubst` command (by way of `make`) to generate valid K8s YAML from:
 
@@ -171,4 +172,8 @@ $ kubectl get crds --selector cnrm.cloud.google.com/managed-by-kcc=true
 
 
 
+## TODO
 
+- add screen shots
+- add architecture schematic for demo app
+- break up monolith README.md into per-section README.mds
