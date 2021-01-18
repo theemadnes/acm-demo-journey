@@ -242,6 +242,8 @@ Give it a few minutes, but momentarily you should start seeing `✅ GCP PubSub a
 
 So your app deployment is eventually consistent - you can deploy this stuff in any order, and it eventually converges into a functional (albeit super basic) app. Pretty neat, huh?
 
+One more thing - the demo app is basically firing off Pub/Sub messages to nobody. If you want to see things end-to-end, you can create a subscription to your topic via the `gcloud` CLI, although I'll leave that as an excercise for the reader.
+
 ## 04-policy-controller-config-connector
 
 hi
