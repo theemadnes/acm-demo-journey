@@ -145,6 +145,11 @@ Make sure you've completed the Config Connector setup (service account setup, po
 $ gcloud services enable cloudresourcemanager.googleapis.com
 ```
 
+The demo app that you're going to deploy is very simple. It's composed of:
+
+- [Cloud Pub/Sub](https://cloud.google.com/pubsub) topic 
+- Express.js app that runs in K8s pods that serves up two paths. The root (`/`) path serves up an index.html doc, and a second path `/gcp_check/`, when accessed, will attempt to publish a message to the Pub/Sub topic. Embedded in the index.html document is a script running on an interval to `GET` the `/gcp_check/` path, and will report back on whether it was successful or not
+
 For this walkthrough, the K8s resources for both the app elements and the GCP infrastructure will live in the same K8s namespace called `config-connector-demo-app`. The YAML used to create that namespace, along with several other YAML manifests require references to your project ID. To simplify things, we've included some YAML "templates" in `03-config-connector/k8s-templates` that we'll use the `envsubst` command (by way of `make`) to generate valid K8s YAML from:
 
 ```
@@ -163,5 +168,7 @@ To get a print-out of supported GCP resources on whatever version of Config Conn
 ```
 $ kubectl get crds --selector cnrm.cloud.google.com/managed-by-kcc=true
 ```
+
+
 
 
