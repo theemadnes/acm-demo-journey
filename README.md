@@ -177,16 +177,16 @@ $ export project_id=$(gcloud config get-value project) # or whatever project you
 
 $ pack build -p 03-config-connector/src/ \
 --builder gcr.io/buildpacks/builder:v1 \
---publish gcr.io/${project_id}/config-connector-demo-app
+--publish gcr.io/${project_id}/config-connector-demo-app:v1.0.0
 .
 .
 .
 Reusing cache layer 'google.nodejs.runtime:node'
 Reusing cache layer 'google.nodejs.npm:npm'
-Successfully built image gcr.io/am01-services/config-connector-demo-app
+Successfully built image gcr.io/am01-services/config-connector-demo-app:v1.0.0
 ```
 
-Once you've built and published your image, update the image reference in `03-config-connector/k8s/app/deployment.yaml` to point to the newly built & published image in GCR. If you're feeling brave, you can use the `:latest` tag as you should only need to build this once. If, on the other hand, you plan on modifying the source and building your own versions, I'd suggest publishing with some tagging strategy that's easier to track versions with.
+Once you've built and published your image, update the image reference in `03-config-connector/k8s/app/deployment.yaml` to point to the newly built & published image in GCR. If you plan on modifying the source and building your own versions, just tweak the tag suffix (`:v1.0.0` in the example above).
 
 Now, let's deploy the *app* components first (minus the GCP stuff, for now):
 
