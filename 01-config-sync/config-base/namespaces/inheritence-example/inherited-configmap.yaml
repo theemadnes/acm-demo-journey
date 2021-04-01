@@ -5,4 +5,4 @@ metadata:
 data:
   database: bar-db
   database_uri: bar-db://1.1.1.1:1234
-  hello: world
+  
