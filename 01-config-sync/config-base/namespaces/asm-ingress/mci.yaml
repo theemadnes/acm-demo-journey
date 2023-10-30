@@ -1,0 +1,23 @@
+apiVersion: networking.gke.io/v1beta1
+kind: MultiClusterIngress
+metadata:
+  name: asm-ingressgateway-multicluster-ingress
+  namespace: asm-ingress
+  annotations:
+    networking.gke.io/static-ip: "130.211.5.156"
+    #kubernetes.io/ingress.allow-http: "false" # not recognized
+    networking.gke.io/pre-shared-certs: "gke-mc-ingress-cert"
+spec:
+  template:
+    spec:
+      backend:
+       serviceName: asm-ingressgateway-multicluster-svc-1
+       servicePort: 443
+      rules:
+        - host: 'frontend.endpoints.e2m-doc-01.cloud.goog'
+          http:
+            paths:
+            - path: "/"
+              backend:
+                serviceName: asm-ingressgateway-multicluster-svc-1
+                servicePort: 443
