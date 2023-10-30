@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: asm-ingressgateway
+  namespace: asm-ingress
+  annotations:
+    cloud.google.com/neg: '{"ingress": true}'
+  labels:
+    asm: asm-ingressgateway
+    app: asm-ingressgateway
+spec:
+  ports:
+  # status-port exposes a /healthz/ready endpoint that can be used with GKE Ingress health checks
+  - name: status-port
+    port: 15021
+    protocol: TCP
+    targetPort: 15021
+  # Any ports exposed in Gateway resources should be exposed here.
+  - name: http2
+    port: 80
+    targetPort: 8080
+  - name: https
+    port: 443
+    targetPort: 8443
+    #appProtocol: HTTP2 # can’t do HTTP2 yet
+    appProtocol: HTTP2
+  selector:
+    asm: asm-ingressgateway
+    app: asm-ingressgateway
+  type: ClusterIP
