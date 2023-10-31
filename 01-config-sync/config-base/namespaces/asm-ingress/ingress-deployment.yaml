@@ -49,7 +49,7 @@ metadata:
   namespace: asm-ingress
 spec:
   maxReplicas: 5
-  minReplicas: 2
+  minReplicas: 3
   metrics:
   - type: Resource
     resource:
